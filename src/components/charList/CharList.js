@@ -29,11 +29,11 @@ class CharList extends Component {
     }
 
     loadOk = (res) => {
-        console.log("res");
         this.setState({
             data: [...this.state.data, ...res.data.results],
             load: false,
-            error: false
+            error: false,
+            next: false
         })
     }
 
@@ -55,25 +55,20 @@ class CharList extends Component {
         this.load(ofset)
         .then(res => this.loadOk(res))
         .catch(() => this.loadError())
-        this.setState({
-            next: false
-        })
     }
 
     componentDidMount() {
         this.getCharacter();
-        console.log("123");
     }
 
     render() {
-        const {data, error, load} = this.state;
+        const {data, error, load, next} = this.state;
         const spiner = (load) ? <Spiner/> : null;
         const errorMes = (error) ? <Error/> : null;
-        const content = (!load && !error) ? <Content data={data} 
+        const content = (!load && !error) || next ? <Content data={data} 
                                                     onNextCharacter={this.onNextCharacter}
                                                     onClickCharacter={(id) => this.props.onClickCharacter(id)}
                                             /> : null;
-   
         return (
             <div className="char__list">
                 {content}
@@ -87,7 +82,7 @@ class CharList extends Component {
 const Content = (props) => {
     const {data, onClickCharacter, onNextCharacter} = props;
 
-    let character = data.map(el => {
+    const character = data.map(el => {
         return (
             <CharacterCard name={el.name} 
                 key={el.id} 
