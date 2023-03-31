@@ -15,7 +15,8 @@ class CharList extends Component {
             load: false,
             error: false,
             next: null,
-            offset: 210
+            offset: 1535,
+            buttonOff: false
         }
     }
 
@@ -30,13 +31,17 @@ class CharList extends Component {
     }
 
     loadOk = (res) => {
+        let ended = false;
+        if (res.data.results.length < 9) {
+            ended = true;
+        }
         this.setState({
             data: [...this.state.data, ...res.data.results],
             load: false,
             error: false,
             next: false,
             offset: this.state.offset + 9,
-            buttonOff: res.data.results.length
+            buttonOff: ended
         })
     }
 
@@ -103,7 +108,7 @@ const Content = (props) => {
             <ul className="char__grid">
                 {character}
             </ul>
-            <button style={((next || buttonOff < 9) ? {"display" : "none"} : {"display": "block"})}
+            <button style={((next || buttonOff) ? {"display" : "none"} : {"display": "block"})}
                 onClick={onNextCharacter}
                 className="button button__main button__long">
                 <div className="inner">load more</div>
