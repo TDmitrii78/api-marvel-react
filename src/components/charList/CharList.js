@@ -14,18 +14,19 @@ class CharList extends Component {
             data: [],
             load: false,
             error: false,
-            next: null
+            next: null,
+            offset: 210
         }
     }
 
     serviceMarvel = new ServiceMarvel();
 
-    load = (ofset) => {
+    load = (offset) => {
         this.setState({
             load: true,
             error: false
         })
-        return this.serviceMarvel.getRequestAllCharacter(ofset);
+        return this.serviceMarvel.getRequestAllCharacter(offset);
     }
 
     loadOk = (res) => {
@@ -33,7 +34,9 @@ class CharList extends Component {
             data: [...this.state.data, ...res.data.results],
             load: false,
             error: false,
-            next: false
+            next: false,
+            offset: this.state.offset + 9,
+            buttonOff: res.data.results.length
         })
     }
 
@@ -48,26 +51,28 @@ class CharList extends Component {
         this.setState({
             next: true
         })
-        this.getCharacter(9); 
+        this.getCharacter(this.state.offset); 
     }
 
-    getCharacter = (ofset) => {
-        this.load(ofset)
+    getCharacter = (offset) => {
+        this.load(offset)
         .then(res => this.loadOk(res))
         .catch(() => this.loadError())
     }
 
     componentDidMount() {
-        this.getCharacter();
+        this.getCharacter(this.state.offset);
     }
 
     render() {
-        const {data, error, load, next} = this.state;
+        const {data, error, load, next, buttonOff} = this.state;
         const spiner = (load) ? <Spiner/> : null;
         const errorMes = (error) ? <Error/> : null;
         const content = (!load && !error) || next ? <Content data={data} 
                                                     onNextCharacter={this.onNextCharacter}
                                                     onClickCharacter={(id) => this.props.onClickCharacter(id)}
+                                                    next={next}
+                                                    buttonOff={buttonOff}
                                             /> : null;
         return (
             <div className="char__list">
@@ -80,7 +85,7 @@ class CharList extends Component {
 }
 
 const Content = (props) => {
-    const {data, onClickCharacter, onNextCharacter} = props;
+    const {data, onClickCharacter, onNextCharacter, next, buttonOff} = props;
 
     const character = data.map(el => {
         return (
@@ -88,6 +93,7 @@ const Content = (props) => {
                 key={el.id} 
                 characterImg={el.thumbnail.path + '.' + el.thumbnail.extension}
                 onClickCharacter={() => onClickCharacter(el.id)}
+                next={next}
                 />
         )
     });
@@ -97,7 +103,7 @@ const Content = (props) => {
             <ul className="char__grid">
                 {character}
             </ul>
-            <button 
+            <button style={((next || buttonOff < 9) ? {"display" : "none"} : {"display": "block"})}
                 onClick={onNextCharacter}
                 className="button button__main button__long">
                 <div className="inner">load more</div>

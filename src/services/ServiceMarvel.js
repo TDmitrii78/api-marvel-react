@@ -1,7 +1,6 @@
 class ServiceMarvel {
     _baseApi = "https://gateway.marvel.com:443";
     _apiKey = "apikey=435e3565b3cf668b55ae881192369602";
-    _ofset = 200;
 
     getResourse = async (url) => {
         let response = await fetch(url);
@@ -11,8 +10,9 @@ class ServiceMarvel {
         return await response.json();
     }
 
-    getRequestAllCharacter = (ofset) => {
-        return this.getResourse(`${this._baseApi}/v1/public/characters?limit=9&offset=${(ofset) ? this._ofset += ofset: this._ofset}&${this._apiKey}`);
+    getRequestAllCharacter = (offset) => {
+        console.log(offset);
+        return this.getResourse(`${this._baseApi}/v1/public/characters?limit=9&offset=${offset}&${this._apiKey}`);
     }
 
     getRequestCharacter = async (id) => { 
