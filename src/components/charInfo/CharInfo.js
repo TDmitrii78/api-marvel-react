@@ -1,5 +1,7 @@
 import {Component} from 'react';
 
+import PropTypes from 'prop-types';
+
 import ServiceMarvel from "../../services/ServiceMarvel";
 import Spiner from '../spiner/Spiner';
 import Error from '../error/Error';
@@ -56,7 +58,7 @@ class CharInfo extends Component {
     componentDidUpdate(prevProps) {
         if (prevProps.id !== this.props.id) {
             this.getCharacter(this.props.id);
-        }
+        }       
     }
 
     render() {
@@ -124,6 +126,19 @@ const Content = (props) => {
         </>
 
     )
+}
+
+CharInfo.propTypes = {
+    id: PropTypes.number
+}
+
+Content.propTypes = {
+    name: PropTypes.string, 
+    thumbnail: PropTypes.string,
+    homepage: PropTypes.string, 
+    Wiki: PropTypes.string,
+    description: PropTypes.string,
+    comics: PropTypes.array
 }
 
 export default CharInfo;

@@ -4,6 +4,7 @@ import AppHeader from "../appHeader/AppHeader";
 import RandomChar from "../randomChar/RandomChar";
 import CharList from "../charList/CharList";
 import CharInfo from "../charInfo/CharInfo";
+import ErrorBoundaries from "../errorBoundaries/ErrorBoundaries";
 
 import decoration from '../../resources/img/vision.png';
 
@@ -25,12 +26,20 @@ class App extends Component {
 
         return (
             <div className="app">
-                <AppHeader/>
+                <ErrorBoundaries>
+                    <AppHeader/>
+                </ErrorBoundaries>
                 <main>
-                    <RandomChar/>
+                    <ErrorBoundaries>
+                        <RandomChar/>
+                    </ErrorBoundaries>
                     <div className="char__content">
-                        <CharList onClickCharacter={(id) => this.onClickCharacter(id)}/>
-                        <CharInfo id={id}/>
+                        <ErrorBoundaries>
+                            <CharList onClickCharacter={(id) => this.onClickCharacter(id)}/>
+                        </ErrorBoundaries>
+                        <ErrorBoundaries>
+                            <CharInfo id={id}/>
+                        </ErrorBoundaries>
                     </div>
                     <img className="bg-decoration" src={decoration} alt="vision"/>
                 </main>

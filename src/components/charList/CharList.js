@@ -1,5 +1,7 @@
 import { Component } from 'react';
 
+import PropTypes from 'prop-types';
+
 import Spiner from '../spiner/Spiner';
 import Error from '../error/Error';
 import ServiceMarvel from '../../services/ServiceMarvel';
@@ -67,11 +69,12 @@ class CharList extends Component {
     }
 
     componentDidMount() {
-        const arr = JSON.parse(localStorage.getItem("data"));
+        if (this.first) return; this.first = true;
+        const arrData = JSON.parse(localStorage.getItem("data"));
         this.setState(
-        (localStorage.getItem("offset") && localStorage.getItem("data")) ? {
+            (localStorage.getItem("offset") && localStorage.getItem("data")) ? {
                 offset: +localStorage.getItem("offset"),
-                data: (JSON.parse(localStorage.getItem("data")).slice(0, arr.length - 9))
+                data: arrData.slice(0, arrData.length - 9)
             } :
             {
                 offset: this.state.startOffset
@@ -86,7 +89,6 @@ class CharList extends Component {
         }
         if (prevState.data !== this.state.data) {
             localStorage.setItem("data", JSON.stringify(this.state.data));
-            console.log("qwer");
         }
     }
 
@@ -155,6 +157,23 @@ const CharacterCard = (props) => {
                 <div className="char__name">{name}</div>
             </li>
     )
+}
+
+CharList.propType = {
+    onClickCharacter: PropTypes.func
+}
+
+Content.propType = {
+    data: PropTypes.array,
+    onClickCharacter: PropTypes.func,
+    onNextCharacter: PropTypes.func,
+    next: PropTypes.bool,
+    buttonOff: PropTypes.bool
+}
+
+CharacterCard.propType = {
+    name: PropTypes.string,
+    characterImg: PropTypes.string
 }
 
 export default CharList;

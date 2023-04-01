@@ -1,5 +1,7 @@
 import {Component} from "react";
 
+import PropTypes from 'prop-types';
+
 import ServiceMarvel from "../../services/ServiceMarvel";
 import Spiner from "../spiner/Spiner";
 import Error from "../error/Error";
@@ -120,6 +122,14 @@ const RandomBlock = ({character}) => {
             </div>
         </div>
     )
+}
+
+RandomBlock.propTypes = {
+    thumbnail: PropTypes.string,
+    name: PropTypes.string,
+    homepage: PropTypes.string,
+    Wiki: PropTypes.string,
+    description: PropTypes.string
 }
 
 export default RandomChar;
