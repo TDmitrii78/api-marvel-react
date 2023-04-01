@@ -1,7 +1,6 @@
 import './appHeader.css';
 
 const AppHeader = () => {
-    console.log("AppHeader");
     return (
         <header className="app__header">
             <h1 className="app__title">

@@ -15,8 +15,9 @@ class CharList extends Component {
             load: false,
             error: false,
             next: null,
-            offset: 210,
-            buttonOff: false
+            startOffset: 210,
+            offset: 0,
+            buttonOff: false,
         }
     }
 
@@ -35,14 +36,13 @@ class CharList extends Component {
         if (res.data.results.length < 9) {
             ended = true;
         }
-        this.setState({
+        this.setState(() => ({
             data: [...this.state.data, ...res.data.results],
             load: false,
             error: false,
             next: false,
-            offset: this.state.offset + 9,
             buttonOff: ended
-        })
+        }))
     }
 
     loadError = (res) => {
@@ -52,11 +52,12 @@ class CharList extends Component {
         })
     }
 
-    onNextCharacter = () => {
+    onNextCharacter = () => {       
         this.setState({
+            offset: this.state.offset + 9,
             next: true
-        })
-        this.getCharacter(this.state.offset); 
+        }, () => this.getCharacter(this.state.offset)
+        )
     }
 
     getCharacter = (offset) => {
@@ -66,7 +67,27 @@ class CharList extends Component {
     }
 
     componentDidMount() {
-        this.getCharacter(this.state.offset);
+        const arr = JSON.parse(localStorage.getItem("data"));
+        this.setState(
+        (localStorage.getItem("offset") && localStorage.getItem("data")) ? {
+                offset: +localStorage.getItem("offset"),
+                data: (JSON.parse(localStorage.getItem("data")).slice(0, arr.length - 9))
+            } :
+            {
+                offset: this.state.startOffset
+            }, () => this.getCharacter(this.state.offset)
+        )
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (prevState.offset !== this.state.offset) {
+            localStorage.setItem("offset", this.state.offset);
+  
+        }
+        if (prevState.data !== this.state.data) {
+            localStorage.setItem("data", JSON.stringify(this.state.data));
+            console.log("qwer");
+        }
     }
 
     render() {

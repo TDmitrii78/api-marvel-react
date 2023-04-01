@@ -11,7 +11,6 @@ class ServiceMarvel {
     }
 
     getRequestAllCharacter = (offset) => {
-        console.log(offset);
         return this.getResourse(`${this._baseApi}/v1/public/characters?limit=9&offset=${offset}&${this._apiKey}`);
     }
 
