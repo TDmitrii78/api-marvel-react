@@ -96,12 +96,13 @@ class CharList extends Component {
         const {data, error, load, next, buttonOff} = this.state;
         const spiner = (load) ? <Spiner/> : null;
         const errorMes = (error) ? <Error/> : null;
-        const content = (!load && !error) || next ? <Content data={data} 
-                                                    onNextCharacter={this.onNextCharacter}
-                                                    onClickCharacter={(id) => this.props.onClickCharacter(id)}
-                                                    next={next}
-                                                    buttonOff={buttonOff}
-                                            /> : null;
+        const content = (!load && !error) || next ? <Content 
+                                                        data={data} 
+                                                        onNextCharacter={this.onNextCharacter}
+                                                        onClickCharacter={(id) => this.props.onClickCharacter(id)}
+                                                        next={next}
+                                                        buttonOff={buttonOff}
+                                                    /> : null;
         return (
             <div className="char__list">
                 {content}
@@ -112,51 +113,68 @@ class CharList extends Component {
     }
 }
 
-const Content = (props) => {
-    const {data, onClickCharacter, onNextCharacter, next, buttonOff} = props;
-
-    const character = data.map(el => {
-        return (
-            <CharacterCard name={el.name} 
-                key={el.id} 
-                characterImg={el.thumbnail.path + '.' + el.thumbnail.extension}
-                onClickCharacter={() => onClickCharacter(el.id)}
-                next={next}
-                />
-        )
-    });
-
-    return (
-        <>
-            <ul className="char__grid">
-                {character}
-            </ul>
-            <button style={((next || buttonOff) ? {"display" : "none"} : {"display": "block"})}
-                onClick={onNextCharacter}
-                className="button button__main button__long">
-                <div className="inner">load more</div>
-            </button>
-        </>
-    )
-}
-
-const CharacterCard = (props) => {
-    const {name, characterImg} = props;
-    let imgStyle = {"objectFit": "cover"};  
-    if (characterImg === "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg") {
-        imgStyle = {"objectFit": "unset"};
+class Content extends Component{
+    constructor(props) {
+        super(props);
+        this.state = {
+            selectId: null
+        }
     }
 
-    return (
-            <li className="char__item"
-                onClick={props.onClickCharacter}
-            >
-                <img src={characterImg} 
-                    style={imgStyle}
-                    alt="character foto"/>
-                <div className="char__name">{name}</div>
-            </li>
-    )
+    onClickCharacter = (id) => {
+        this.setState({
+            selectId: id
+        })
+        this.props.onClickCharacter(id);
+    }
+
+    arrRefs = [];
+
+    render() {
+        const {data, onNextCharacter, next, buttonOff} = this.props;
+        const {selectId} = this.state;
+        const character = data.map(el => {
+
+            const characterImg = el.thumbnail.path + '.' + el.thumbnail.extension;
+
+            let className = "char__item";
+            if (selectId === el.id) {
+                className += ` char__item_selected`;
+            }
+
+            let imgStyle = {"objectFit": "cover"};  
+            if (characterImg === "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg") {
+                imgStyle = {"objectFit": "unset"};
+            }
+   
+            return (
+                <li
+                    key={el.id} 
+                    className={className}
+                    tabIndex={"0"}
+                    onClick={() => this.onClickCharacter(el.id)}
+                >
+                    <img src={characterImg} 
+                        style={imgStyle}
+                        alt="character foto"/>
+                    <div className="char__name">{el.name}</div>
+                </li>
+            )
+        });
+
+        return (
+            <>
+                <ul className="char__grid">
+                    {character}
+                </ul>
+                <button style={((next || buttonOff) ? {"display" : "none"} : {"display": "block"})}
+                    onClick={onNextCharacter}
+                    className="button button__main button__long">
+                    <div className="inner">load more</div>
+                </button>
+            </>
+        )
+    }
 }
 
 CharList.propType = {
@@ -169,11 +187,6 @@ Content.propType = {
     onNextCharacter: PropTypes.func,
     next: PropTypes.bool,
     buttonOff: PropTypes.bool
-}
-
-CharacterCard.propType = {
-    name: PropTypes.string,
-    characterImg: PropTypes.string
 }
 
 export default CharList;
