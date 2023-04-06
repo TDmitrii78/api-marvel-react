@@ -153,6 +153,7 @@ class Content extends Component{
                     className={className}
                     tabIndex={"0"}
                     onClick={() => this.onClickCharacter(el.id)}
+                    onKeyDown={event => (event.key === 'Enter') ? this.onClickCharacter(el.id) : null}
                 >
                     <img src={characterImg} 
                         style={imgStyle}
