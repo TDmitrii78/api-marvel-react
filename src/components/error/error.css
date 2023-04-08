@@ -1,7 +1,8 @@
 .divError {
+  margin-top: 10px;
   display: flex;
   justify-content: center;
 }
 .divError img {
-  height: 250px;
+  height: 150px;
 }/*# sourceMappingURL=error.css.map */

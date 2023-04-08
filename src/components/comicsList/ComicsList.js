@@ -1,6 +1,8 @@
 import { Component} from 'react';
 
 import ServiceMarvel from '../../services/ServiceMarvel';
+import Spiner from '../spiner/Spiner';
+import Error from '../error/Error';
 
 import './comicsList.css';
 
@@ -10,7 +12,7 @@ class ComicsList extends Component{
         super(props)
         this.state = {
             comics: [],
-            startOffset: 30,
+            startOffset: 8,
             offset: null,
             load: false,
             error: false,
@@ -23,7 +25,7 @@ class ComicsList extends Component{
     getAllComics = (offset) => {
         this.loadServ(offset)
         .then(res => this.loadOk(res))
-        .catch(this.loadError());
+        .catch(this.loadError);
     }
 
     loadServ = (offset) => {
@@ -31,14 +33,15 @@ class ComicsList extends Component{
             load: true,
             error: false
         })
-        return this.serviceMarvel.getAllComics(offset)
+        return this.serviceMarvel.getAllComics(offset);
     }
 
     loadOk = (res) => {
         this.setState({
             load: false,
             error: false,
-            comics: [...this.state.comics, ...res.data.results]
+            comics: [...this.state.comics, ...res.data.results],
+            buttonOff: (res.data.results.length < 8) ? true : false
         })
     }
 
@@ -68,18 +71,28 @@ class ComicsList extends Component{
     }
 
     render() {
-        console.log("render");
-        const content = <Items comics={this.state.comics} onNextComics={this.onNextComics}/>
+        const {load, error} = this.state;
+
+        const spiner = (load) ? <Spiner/> : null;
+        const errorMes = (error) ? <Error/> : null;
+        const content = <Items 
+                            load={this.state.load}
+                            comics={this.state.comics} 
+                            onNextComics={this.onNextComics}
+                            buttonOff={this.state.buttonOff}
+                        />
         return (
             <div className="comics__list">
                 {content}
+                {spiner}
+                {errorMes}
             </div>
         )
     }
 }
 
 const Items = (props) => {
-    const {comics, onNextComics} = props;
+    const {comics, onNextComics, buttonOff, load} = props;
     return (
         <>
             <ul className="comics__grid">
@@ -101,6 +114,7 @@ const Items = (props) => {
                 }
             </ul>
             <button 
+                style={(buttonOff || load) ? {"display": "none"} : {"display": "block"}}
                 onClick={onNextComics}
                 className="button button__main button__long">
                 <div className="inner">load more</div>

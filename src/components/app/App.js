@@ -31,8 +31,8 @@ class App extends Component {
                     <AppHeader/>
                 </ErrorBoundaries>
                 <main>
-                    {/* <ComicsList/> */}
-                    <ErrorBoundaries>
+                    <ComicsList/>
+                    {/* <ErrorBoundaries>
                         <RandomChar/>
                     </ErrorBoundaries>
                     <div className="char__content">
@@ -43,7 +43,7 @@ class App extends Component {
                             <CharInfo id={id}/>
                         </ErrorBoundaries>
                     </div>
-                    <img className="bg-decoration" src={decoration} alt="vision"/>
+                    <img className="bg-decoration" src={decoration} alt="vision"/> */}
                 </main>
             </div>
         )

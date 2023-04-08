@@ -72,12 +72,6 @@ class CharList extends Component {
 
     componentDidUpdate(prevProps, prevState) {
         if (prevState.offset !== this.state.offset) {
-            localStorage.setItem("offset", this.state.offset);
-        }
-        if (prevState.data !== this.state.data) {
-            localStorage.setItem("data", JSON.stringify(this.state.data));
-        }
-        if (prevState.offset !== this.state.offset) {
             this.getCharacter(this.state.offset)
         }
     }
