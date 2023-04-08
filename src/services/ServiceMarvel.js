@@ -10,6 +10,10 @@ class ServiceMarvel {
         return await response.json();
     }
 
+    getAllComics = (offset) => {
+        return this.getResourse(`${this._baseApi}/v1/public/comics?limit=8&offset=${offset}&${this._apiKey}`)
+    }
+
     getRequestAllCharacter = (offset) => {
         return this.getResourse(`${this._baseApi}/v1/public/characters?limit=9&offset=${offset}&${this._apiKey}`);
     }

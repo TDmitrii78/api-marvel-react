@@ -16,7 +16,6 @@ class CharList extends Component {
             data: [],
             load: false,
             error: false,
-            next: null,
             startOffset: 210,
             offset: 0,
             buttonOff: false,
@@ -42,7 +41,6 @@ class CharList extends Component {
             data: [...this.state.data, ...res.data.results],
             load: false,
             error: false,
-            next: false,
             buttonOff: ended
         }))
     }
@@ -57,9 +55,7 @@ class CharList extends Component {
     onNextCharacter = () => {       
         this.setState({
             offset: this.state.offset + 9,
-            next: true
-        }, () => this.getCharacter(this.state.offset)
-        )
+        })
     }
 
     getCharacter = (offset) => {
@@ -69,40 +65,34 @@ class CharList extends Component {
     }
 
     componentDidMount() {
-        if (this.first) return; this.first = true;
-        const arrData = JSON.parse(localStorage.getItem("data"));
-        this.setState(
-            (localStorage.getItem("offset") && localStorage.getItem("data")) ? {
-                offset: +localStorage.getItem("offset"),
-                data: arrData.slice(0, arrData.length - 9)
-            } :
-            {
-                offset: this.state.startOffset
-            }, () => this.getCharacter(this.state.offset)
-        )
+        this.setState({
+            offset: this.state.startOffset
+        })
     }
 
     componentDidUpdate(prevProps, prevState) {
         if (prevState.offset !== this.state.offset) {
             localStorage.setItem("offset", this.state.offset);
-  
         }
         if (prevState.data !== this.state.data) {
             localStorage.setItem("data", JSON.stringify(this.state.data));
         }
+        if (prevState.offset !== this.state.offset) {
+            this.getCharacter(this.state.offset)
+        }
     }
 
     render() {
-        const {data, error, load, next, buttonOff} = this.state;
+        const {data, error, load, buttonOff} = this.state;
         const spiner = (load) ? <Spiner/> : null;
         const errorMes = (error) ? <Error/> : null;
-        const content = (!load && !error) || next ? <Content 
-                                                        data={data} 
-                                                        onNextCharacter={this.onNextCharacter}
-                                                        onClickCharacter={(id) => this.props.onClickCharacter(id)}
-                                                        next={next}
-                                                        buttonOff={buttonOff}
-                                                    /> : null;
+        const content = true ? <Content 
+                                    load={load}
+                                    data={data} 
+                                    onNextCharacter={this.onNextCharacter}
+                                    onClickCharacter={(id) => this.props.onClickCharacter(id)}
+                                    buttonOff={buttonOff}
+                                /> : null;
         return (
             <div className="char__list">
                 {content}
@@ -128,10 +118,8 @@ class Content extends Component{
         this.props.onClickCharacter(id);
     }
 
-    arrRefs = [];
-
     render() {
-        const {data, onNextCharacter, next, buttonOff} = this.props;
+        const {data, onNextCharacter, load, buttonOff} = this.props;
         const {selectId} = this.state;
         const character = data.map(el => {
 
@@ -168,7 +156,7 @@ class Content extends Component{
                 <ul className="char__grid">
                     {character}
                 </ul>
-                <button style={((next || buttonOff) ? {"display" : "none"} : {"display": "block"})}
+                <button style={((load || buttonOff) ? {"display" : "none"} : {"display": "block"})}
                     onClick={onNextCharacter}
                     className="button button__main button__long">
                     <div className="inner">load more</div>
@@ -186,7 +174,6 @@ Content.propType = {
     data: PropTypes.array,
     onClickCharacter: PropTypes.func,
     onNextCharacter: PropTypes.func,
-    next: PropTypes.bool,
     buttonOff: PropTypes.bool
 }
 
