@@ -1,53 +1,27 @@
-import { Component } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import AppHeader from "../appHeader/AppHeader";
-import RandomChar from "../randomChar/RandomChar";
-import CharList from "../charList/CharList";
-import CharInfo from "../charInfo/CharInfo";
-import ComicsList from "../comicsList/ComicsList";
 import ErrorBoundaries from "../errorBoundaries/ErrorBoundaries";
+import MainPage from '../page/MainPage';
+import ComicsPage from "../page/ComicsPage";
 
-import decoration from '../../resources/img/vision.png';
+const App = () => {
 
-
-class App extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            id: null
-        }
-    }
-
-    onClickCharacter = (id) => {
-        this.setState({id: id});
-    }
-
-    render() {
-        const {id} = this.state;
-
-        return (
+    return (
+        <Router>
             <div className="app">
                 <ErrorBoundaries>
                     <AppHeader/>
                 </ErrorBoundaries>
                 <main>
-                    <ComicsList/>
-                    {/* <ErrorBoundaries>
-                        <RandomChar/>
-                    </ErrorBoundaries>
-                    <div className="char__content">
-                        <ErrorBoundaries>
-                            <CharList onClickCharacter={(id) => this.onClickCharacter(id)}/>
-                        </ErrorBoundaries>
-                        <ErrorBoundaries>
-                            <CharInfo id={id}/>
-                        </ErrorBoundaries>
-                    </div>
-                    <img className="bg-decoration" src={decoration} alt="vision"/> */}
+                    <Routes> 
+                      <Route path="/" element={<MainPage/>}/>
+                      <Route path="/comics" element={<ComicsPage/>}/>
+                    </Routes> 
                 </main>
             </div>
-        )
-    }
+        </Router> 
+    )
 }
 
 export default App;

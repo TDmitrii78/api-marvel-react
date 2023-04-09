@@ -1,4 +1,4 @@
-@import '../../style/variables.css';
+@import '../../style/variables.scss';
 
 .app {
     &__header {
@@ -22,9 +22,9 @@
             line-height: 32px;
             li {
                 margin: 0 8px;
-                a:hover {
-                    color: $main-color;
-                }
+                // a:hover {
+                //     color: $main-color;
+                // }
             }
         }
     }
