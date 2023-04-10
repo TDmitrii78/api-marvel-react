@@ -1,4 +1,5 @@
 import {Component} from 'react';
+import { Link } from 'react-router-dom';
 
 import PropTypes from 'prop-types';
 
@@ -115,8 +116,11 @@ const Content = (props) => {
                 {(comics.length) ? null : 'Not comics.'}
                 {
                     comics.map((el, i) => {
+                        const id = el.resourceURI.split('/').reverse()[0]
                         if (i < 9) {
-                            return <li className="char__comics-item" key={i}>{el.name}</li>
+                            return <li className="char__comics-item" key={i}>
+                                        <Link to={`/comics/${id}`}>{el.name}</Link>
+                                    </li>
                         }
                         return null
                     })

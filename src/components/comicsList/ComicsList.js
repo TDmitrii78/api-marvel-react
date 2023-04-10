@@ -5,6 +5,7 @@ import Spiner from '../spiner/Spiner';
 import Error from '../error/Error';
 
 import './comicsList.css';
+import { Link } from 'react-router-dom';
 
 
 class ComicsList extends Component{
@@ -103,11 +104,11 @@ const Items = (props) => {
                                 key={i}
                                 className="comics__item"
                             >
-                                <a href="#">
+                                <Link to={`/comics/${el.id}`}>
                                     <img src={el.thumbnail.path + `.` + el.thumbnail.extension} alt="ultimate war" className="comics__item-img"/>
                                     <div className="comics__item-name">{el.title}</div>
                                     <div className="comics__item-price">{el.prices[0].price}$</div>
-                                </a>
+                                </Link>
                             </li>
                         )
                     })
