@@ -1,0 +1,13 @@
+.error404 {
+  width: 100%;
+  height: 100vh;
+  background-image: url(./404-page.png);
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.error404 button {
+  width: 150px;
+  height: 50px;
+  border-radius: 7px;
+  background-color: green;
+}/*# sourceMappingURL=404.css.map */
