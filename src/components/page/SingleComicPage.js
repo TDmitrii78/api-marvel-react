@@ -97,7 +97,7 @@ const Content = (props) => {
                 <p className="single-comic__descr">Language: {textObjects.length ? textObjects[0].language : 'not information'}</p>
                 <div className="single-comic__price">{prices[0].price ? prices[0].price : `out of stock `}$</div>
             </div>
-            <Link to='/comics/' className="single-comic__back">Back to all</Link>
+            <Link to={-1} className="single-comic__back">Back to all</Link>
         </>
     )
 }
