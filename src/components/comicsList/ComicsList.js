@@ -1,3 +1,5 @@
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
+
 import { Component} from 'react';
 
 import ServiceMarvel from '../../services/ServiceMarvel';
@@ -97,22 +99,26 @@ const Items = (props) => {
     return (
         <>
             <ul className="comics__grid">
-                {
-                    comics.map((el, i) => {
-                        return (
-                            <li 
-                                key={i}
-                                className="comics__item"
-                            >
-                                <Link to={`/comics/${el.id}`}>
-                                    <img src={el.thumbnail.path + `.` + el.thumbnail.extension} alt="ultimate war" className="comics__item-img"/>
-                                    <div className="comics__item-name">{el.title}</div>
-                                    <div className="comics__item-price">{el.prices[0].price}$</div>
-                                </Link>
-                            </li>
-                        )
-                    })
-                }
+                <TransitionGroup component={null}>
+                    {
+                        comics.map((el, i) => {
+                            return (
+                                <CSSTransition key={i} timeout={500} classNames="comics__item">
+                                    <li 
+                                        key={i}
+                                        className="comics__item"
+                                    >
+                                        <Link to={`/comics/${el.id}`}>
+                                            <img src={el.thumbnail.path + `.` + el.thumbnail.extension} alt="ultimate war" className="comics__item-img"/>
+                                            <div className="comics__item-name">{el.title}</div>
+                                            <div className="comics__item-price">{el.prices[0].price}$</div>
+                                        </Link>
+                                    </li>
+                                </CSSTransition>
+                            )
+                        })
+                    }
+                </TransitionGroup>
             </ul>
             <button 
                 style={(buttonOff || load) ? {"display": "none"} : {"display": "block"}}

@@ -1,3 +1,5 @@
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
+
 import { Component } from 'react';
 
 import PropTypes from 'prop-types';
@@ -130,25 +132,29 @@ class Content extends Component{
             }
    
             return (
-                <li
-                    key={el.id} 
-                    className={className}
-                    tabIndex={"0"}
-                    onClick={() => this.onClickCharacter(el.id)}
-                    onKeyDown={event => (event.key === 'Enter') ? this.onClickCharacter(el.id) : null}
-                >
-                    <img src={characterImg} 
-                        style={imgStyle}
-                        alt="character foto"/>
-                    <div className="char__name">{el.name}</div>
-                </li>
+                <CSSTransition key={el.id} timeout={500} classNames="char__item">
+                    <li
+                        key={el.id} 
+                        className={className}
+                        tabIndex={"0"}
+                        onClick={() => this.onClickCharacter(el.id)}
+                        onKeyDown={event => (event.key === 'Enter') ? this.onClickCharacter(el.id) : null}
+                    >
+                        <img src={characterImg} 
+                            style={imgStyle}
+                            alt="character foto"/>
+                        <div className="char__name">{el.name}</div>
+                    </li>
+                </CSSTransition>
             )
         });
 
         return (
             <>
                 <ul className="char__grid">
-                    {character}
+                    <TransitionGroup component={null}>
+                        {character}
+                    </TransitionGroup>
                 </ul>
                 <button style={((load || buttonOff) ? {"display" : "none"} : {"display": "block"})}
                     onClick={onNextCharacter}

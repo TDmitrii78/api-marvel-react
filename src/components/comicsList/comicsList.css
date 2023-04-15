@@ -31,4 +31,18 @@
 }
 .comics__item:hover {
   transform: translateY(-5px);
+}
+.comics__item-enter {
+  opacity: 0;
+}
+.comics__item-enter-active {
+  opacity: 1;
+  transition: opacity 500ms;
+}
+.comics__item-exit {
+  opacity: 1;
+}
+.comics__item-exit-active {
+  opacity: 0;
+  transition: opacity 500ms;
 }/*# sourceMappingURL=comicsList.css.map */
