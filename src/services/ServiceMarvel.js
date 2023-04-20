@@ -14,6 +14,10 @@ class ServiceMarvel {
         return this.getResourse(`${this._baseApi}/v1/public/comics/${id}?${this._apiKey}`)
     }
 
+    getCharacterFromName = (name) => {
+        return this.getResourse(`${this._baseApi}/v1/public/characters?name=${name}&${this._apiKey}`)
+    }
+
     getAllComics = (offset) => {
         return this.getResourse(`${this._baseApi}/v1/public/comics?limit=8&offset=${offset}&${this._apiKey}`)
     }
