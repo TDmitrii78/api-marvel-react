@@ -1,90 +1,10 @@
-import { Component } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import PropTypes from 'prop-types';
 
-import ServiceMarvel from '../../services/ServiceMarvel';
-import Spiner from '../spiner/Spiner';
-import Error from '../error/Error';
-
 import './singleComicPage.css';
 
-
-class SingleComic extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            id: null,
-            comics: null,
-            load: false,
-            error: false,
-            buttonOf: false
-        }
-    }
-
-    serviceMarvel = new ServiceMarvel();
-
-    loadServ = (id) => {
-        this.setState({
-            load: true,
-            error: false
-            })
-            return this.serviceMarvel.getComics(id);
-    }
-
-    loadOk = () => {
-        this.setState({
-            load: false,
-            error: false,
-        })
-    }
-
-    loadError = () => {
-        this.setState({
-            load: false,
-            error: true
-        })
-    }
-
-    getCommics = (id) => {
-        this.loadServ(id)
-        .then(res => {
-            this.setState({
-                comics: res.data.results[0]
-            });
-            this.loadOk();
-        })
-        .catch(() => this.loadError);
-    }
-    
-
-    componentDidMount() {
-        this.setState({id: this.props.comicsId})
-    }
-
-    componentDidUpdate(prevProps, prevState) {
-        if (prevState.id !== this.state.id) {
-            this.getCommics(this.state.id);
-        }
-    }
-
-    render() {
-        const {load, error, comics} = this.state;
-        const spiner = (load) ? <Spiner/> : null;
-        const errorMes = (error) ? <Error/> : null;
-        const content = (!load && !error && comics) ? <Content comics={comics}/> : null;
-
-        return (
-            <div className="single-comic">
-                {content}
-                {spiner}
-                {errorMes}
-            </div>
-        )
-    }
-}
-
-const Content = (props) => {
+const SingleComicPage = (props) => {
     const {thumbnail, title, description, prices, pageCount, textObjects} = props.comics;
 
     return (
@@ -102,17 +22,7 @@ const Content = (props) => {
     )
 }
 
-const SingleComicPage = () => {
-    
-    const {comicsId} = useParams();
-    return (
-        <>
-            <SingleComic comicsId={comicsId}/>
-        </>
-    )
-}
-
-Content.propTypes = {
+SingleComicPage.propTypes = {
     comics: PropTypes.object
 }
 
